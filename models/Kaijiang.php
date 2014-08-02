@@ -24,7 +24,7 @@ class Kaijiang extends \yii\base\Object
 			[
 				'title' 	  =>	'操作指示',
 				'description' => 	'输入双色球、大乐透、双色球14087试试',
-				'picurl'	  => 	self::$site_url."/img/logo.jpg",	//url暂时写死
+				'picurl'	  => 	self::$site_url."/img/logo.jpg",
 				'url'		  =>	self::$site_url.'/?r=wechat/help'
 			]
 		];
@@ -39,41 +39,40 @@ class Kaijiang extends \yii\base\Object
 		return  $data;
 	}
 	
+	public static function fetchDetail($caizhong, $periodicalno)
+	{
+		$method  = 'fetchData'.ucfirst($caizhong);
+		self::$method($periodicalno, $detailRow);
+		//@todo cache result
+		return  $detailRow;
+	}
 	
 	//ssq
-	public static function fetchDataSsq($periodicalno)
+	public static function fetchDataSsq($periodicalno, &$detailRow = array())
 	{
 		
-		$data = [
+		if ($periodicalno)
+		{
+			$sql = "select * from expect_ssq where periodicalno = {$periodicalno}";
+		}
+		else 
+		{
+			$sql = "select * from expect_ssq order by periodicalno desc limit 1";
+		}
+		$row = Yii::$app->db->createCommand($sql)->queryOne();
+		
+		//@todo 使用消息模板
+		$data = 
+		[
 			[
-				'title' 	  =>	'双色球第14087期开奖号码：06,18,22,23,32,33|06',
-				'description' => 	'一等奖：6注，每注8,003,802元；二等奖89注，每注253,129元；三等奖1319注，每注3,000元',
-				'picurl'	  => 	self::$site_url."/img/lot_ssq.jpg",	//url暂时写死
-				'url'		  =>	self::$site_url.'/?r=wechat/detail'
+			'title' 	  => "双色球第{$row['periodicalno']}期开奖号码：{$row['redresult']}|{$row['blueresult']}",
+			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'picurl'	  => self::$site_url."/img/lot_ssq.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=ssq&periodicalno={$row['periodicalno']}"
 			]
 		];
-		
+		$detailRow = $row;
 		return $data;
-		
-		/*
-		$text  = "双色球第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-		$text .= "红球：{$result['redresult']}".PHP_EOL;
-		$text .= "蓝球：{$result['blueresult']}".PHP_EOL;
-		$text .= "出球顺序：{$result['outball']}".PHP_EOL;
-		$text .= "一等每注：".number_format($result['money1'])."元".PHP_EOL;
-		$text .= "一等注数：{$result['num1']}注".PHP_EOL;
-		$text .= "二等每注：".number_format($result['money2'])."元".PHP_EOL;
-		$text .= "二等注数：{$result['num2']}注".PHP_EOL;
-		$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';
-		$text .= PHP_EOL;
-		$info   = json_decode($result['info'],true);
-		$tidian = $info['tidian'];
-		$tidian_text = "小帮提点：".PHP_EOL;
-		foreach ($tidian as $t) {
-			$tidian_text .= $t.PHP_EOL;
-		}
-		return $text.PHP_EOL.$tidian_text;
-		*/
 	}
 	
 	

@@ -48,7 +48,10 @@ class WechatController extends Controller
     public function actionDetail()
     {
     	$this->layout	= 'h5';
-    	return $this->render('kaijiang');
+    	$caizhong 		= in_array($_GET['cz'], array_keys(Kaijiang::$keyWordMap)) ? $_GET['cz'] : 'ssq';
+    	$periodicalno   = preg_match('/^\d+$/',$_GET['cz']) ? $_GET['cz'] : '';
+    	$detail = Kaijiang::fetchDetail($caizhong, $periodicalno);
+    	return $this->render("detail_{$caizhong}", ['detail'=>$detail]);
     }
     
     //show kaijiang detail page

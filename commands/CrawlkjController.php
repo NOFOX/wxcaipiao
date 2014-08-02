@@ -22,7 +22,7 @@ use Yii;
  */
 class CrawlkjController extends Controller
 {
-	
+	//'http://zx.500.com/static/info/kaijiang/xml/ssq/14081.xml'
 	const SSQ_OPEN_XML = 'http://zx.500.com/static/info/kaijiang/xml/ssq/index.xml';
 	const DLT_OPEN_XML = 'http://zx.500.com/static/info/kaijiang/xml/dlt/index.xml';
 	const PLS_OPEN_XML = 'http://zx.500.com/static/info/kaijiang/xml/pls/index.xml';
@@ -108,7 +108,7 @@ class CrawlkjController extends Controller
     	Kaijiang::updateKaijiang($istdata, 'expect_pls');
     }
     
-    
+     
     /**
      * 排列五
      */
