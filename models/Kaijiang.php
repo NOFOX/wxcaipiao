@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use Yii;
 
 class Kaijiang extends \yii\base\Object
 {
@@ -253,7 +254,7 @@ class Kaijiang extends \yii\base\Object
     	$text .= PHP_EOL;
     	return $text.PHP_EOL;	
 	}
-	
+
 
 	/**
 	 * 更新开奖数据
@@ -264,7 +265,8 @@ class Kaijiang extends \yii\base\Object
 	{
 		try
 		{
-			return $this->db->where('periodicalno', $data['periodicalno'])->replace($table, $data);
+			Yii::$app->db->createCommand()->delete($table, 'periodicalno = '.$data['periodicalno'])->execute();
+			Yii::$app->db->createCommand()->insert($table, $data)->execute();
 		}
 		catch (Exception $e)
 		{

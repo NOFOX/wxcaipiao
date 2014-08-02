@@ -10,7 +10,7 @@ namespace app\commands;
 use yii\console\Controller;
 use app\models\Kaijiang;
 use app\models\CurlTool;
-
+use Yii;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -75,8 +75,7 @@ class CrawlkjController extends Controller
     			'isoutmoney'   => $data['IsOutMoney'],
     			'info'		   => json_encode($info)
     	);
-    	//$result = $this->Expect_model->replace_expect($ssq_data, 'expect_ssq');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_ssq');
     }
     
     
@@ -106,9 +105,7 @@ class CrawlkjController extends Controller
     			'isoutmoney'   => $data['IsOutMoney'],
     			'info'		   => json_encode($info)
     	);
-    	//$this->load->model('Expect_model');
-    	//$result = $this->Expect_model->replace_expect($pls_data, 'expect_pls');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_pls');
     }
     
     
@@ -132,9 +129,7 @@ class CrawlkjController extends Controller
     			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
     			'isoutmoney'   => $data['IsOutMoney']
     	);
-    	//$this->load->model('Expect_model');
-    	//$result = $this->Expect_model->replace_expect($plw_data, 'expect_plw');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_plw');
     }
     
     
@@ -214,9 +209,7 @@ class CrawlkjController extends Controller
     			'isoutmoney'	=>$data['IsOutMoney'],
     			'info'		 	=> json_encode($info)
     	);
-    	//$this->load->model('Expect_model');
-    	//$result = $this->Expect_model->replace_expect($dlt_data, 'expect_dlt');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_dlt');
     }
     
     /**
@@ -248,9 +241,7 @@ class CrawlkjController extends Controller
     			'isoutmoney'   => $data['IsOutMoney'],
     			'info'		   => json_encode($info)
     	);
-    	//$this->load->model('Expect_model');
-    	//$result = $this->Expect_model->replace_expect($sd_data, 'expect_sd');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_sd');
     }
     
     /**
@@ -284,9 +275,7 @@ class CrawlkjController extends Controller
     			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
     			'isoutmoney'   => $data['IsOutMoney']
     	);
-    	//$this->load->model('Expect_model');
-    	//$result = $this->Expect_model->replace_expect($qxc_data,'expect_qxc');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_qxc');
     }
     
     /**
@@ -315,9 +304,7 @@ class CrawlkjController extends Controller
     			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
     			'isoutmoney'   => $data['IsOutMoney']
     	);
-    	//$this->load->model('Expect_model');
-    	//$result = $this->Expect_model->replace_expect($eexw_data,'expect_eexw');
-    	var_dump($istdata);
+    	Kaijiang::updateKaijiang($istdata, 'expect_eexw');
     }
     
     //get remote xml content
