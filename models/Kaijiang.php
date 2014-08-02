@@ -174,10 +174,6 @@ class Kaijiang extends \yii\base\Object
     	return $text;	
 	}
 	
-	
-	
-	
-	
 
 	/**
 	 * 获取福彩3D开奖信息
@@ -258,6 +254,7 @@ class Kaijiang extends \yii\base\Object
     	return $text.PHP_EOL;	
 	}
 	
+
 	/**
 	 * 更新开奖数据
 	 * @param array $data
@@ -272,6 +269,7 @@ class Kaijiang extends \yii\base\Object
 		catch (Exception $e)
 		{
 			var_dump($e->getMessage());
+			Yii::info("update db fail, table ".$table." ".$e->getMessage());
 		}
 	}
 	

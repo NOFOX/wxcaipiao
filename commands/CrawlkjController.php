@@ -8,6 +8,9 @@
 namespace app\commands;
 
 use yii\console\Controller;
+use app\models\Kaijiang;
+use app\models\CurlTool;
+
 
 /**
  * This command echoes the first argument that you have entered.
@@ -17,7 +20,7 @@ use yii\console\Controller;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CrawlKaijiangController extends Controller
+class CrawlkjController extends Controller
 {
 	
 	const SSQ_OPEN_XML = 'http://zx.500.com/static/info/kaijiang/xml/ssq/index.xml';
@@ -28,99 +31,27 @@ class CrawlKaijiangController extends Controller
 	const QXC_OPEN_XML = 'http://zx.500.com/static/info/kaijiang/xml/qxc/index.xml';
 	const EEXW_OPEN_XML= 'http://zx.500.com/static/info/kaijiang/xml/eexw/index.xml';
 	
-	
-    /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
-     */
-    public function actionIndex($message = 'hello world')
+    public function actionIndex()
     {
-        echo $message . "\n";
+        foreach (array_keys(Kaijiang::$keyWordMap) as $v){
+        	$this->$v();
+        	echo $v, " has been crawled!\n";
+        }
     }
-    
-    
-
-    /**
-     * 排列三
-     */
-    public function pls()
-    {
-    	$xml = $this->get_xml(self::PLS_OPEN_XML);
-    	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
-    	$data = json_decode(json_encode($xml), true);
-    	$info = array(
-    			'fenxi'  => $data['FenXi']['@attributes']
-    	);
-    	$pls_data = array(
-    			'periodicalno' => $data['PeriodicalNO'],
-    			'result'       => $data['Result'],
-    			'resulttime'   => strtotime($data['ResultTime']),
-    			'encashtime'   => strtotime($data['EncashTime']),
-    			'money1'  	   => str_replace(',', '', $data['Money1']),
-    			'num1'         => str_replace(',', '', $data['Num1']),
-    			'money2'       => str_replace(',', '', $data['Money2']),
-    			'num2'         => str_replace(',', '', $data['Num2']),
-    			'money3'       => str_replace(',', '', $data['Money3']),
-    			'num3'         => str_replace(',', '', $data['Num3']),
-    			'zuxuantype'   => $data['ZuxuanType'],
-    			'totalmoney'   => str_replace(',', '', $data['TotalMoney']),
-    			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
-    			'isoutmoney'   => $data['IsOutMoney'],
-    			'info'		   => json_encode($info)
-    	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($pls_data, 'expect_pls');
-    	var_dump($result);
-    }
-    
-    
-    /**
-     * 排列五
-     */
-    public function plw()
-    {
-    	$xml = $this->get_xml(self::PLW_OPEN_XML);
-    	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
-    	$data = json_decode(json_encode($xml), true);
-    	$plw_data = array(
-    			'periodicalno' => $data['PeriodicalNO'],
-    			'result'       => $data['Result'],
-    			'resulttime'   => strtotime($data['ResultTime']),
-    			'encashtime'   => strtotime($data['EncashTime']),
-    			'money1'  	   => str_replace(',', '', $data['Money1']),
-    			'num1'         => str_replace(',', '', $data['Num1']),
-    			'totalmoney'   => str_replace(',', '', $data['TotalMoney']),
-    			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
-    			'isoutmoney'   => $data['IsOutMoney']
-    	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($plw_data, 'expect_plw');
-    	var_dump($result);
-    }
-    
-    /**
-     * 双色球
-     */
+        
     public function ssq()
     {
     	$xml = $this->get_xml(self::SSQ_OPEN_XML);
     	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
+	    	return false;
+    	
     	$data = json_decode(json_encode($xml), true);
     	$info = array(
     			'redfx'  => $data['RedFX']['@attributes'],
     			'bluefx' => $data['BlueFX']['@attributes'],
     			'tidian' => $data['TiDian']['@attributes']
     	);
-    	$ssq_data = array(
+    	$istdata = array(
     			'periodicalno' => $data['PeriodicalNO'],
     			'redresult'    => $data['RedResult'],
     			'outball' 	   => $data['OutBall'],
@@ -144,22 +75,78 @@ class CrawlKaijiangController extends Controller
     			'isoutmoney'   => $data['IsOutMoney'],
     			'info'		   => json_encode($info)
     	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($ssq_data, 'expect_ssq');
-    	var_dump($result);
+    	//$result = $this->Expect_model->replace_expect($ssq_data, 'expect_ssq');
+    	var_dump($istdata);
     }
+    
+    
+    public function pls()
+    {
+    	$xml = $this->get_xml(self::PLS_OPEN_XML);
+    	if ( ! $xml )
+	    	return false;
+    	$data = json_decode(json_encode($xml), true);
+    	$info = array(
+    			'fenxi'  => $data['FenXi']['@attributes']
+    	);
+    	$istdata = array(
+    			'periodicalno' => $data['PeriodicalNO'],
+    			'result'       => $data['Result'],
+    			'resulttime'   => strtotime($data['ResultTime']),
+    			'encashtime'   => strtotime($data['EncashTime']),
+    			'money1'  	   => str_replace(',', '', $data['Money1']),
+    			'num1'         => str_replace(',', '', $data['Num1']),
+    			'money2'       => str_replace(',', '', $data['Money2']),
+    			'num2'         => str_replace(',', '', $data['Num2']),
+    			'money3'       => str_replace(',', '', $data['Money3']),
+    			'num3'         => str_replace(',', '', $data['Num3']),
+    			'zuxuantype'   => $data['ZuxuanType'],
+    			'totalmoney'   => str_replace(',', '', $data['TotalMoney']),
+    			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
+    			'isoutmoney'   => $data['IsOutMoney'],
+    			'info'		   => json_encode($info)
+    	);
+    	//$this->load->model('Expect_model');
+    	//$result = $this->Expect_model->replace_expect($pls_data, 'expect_pls');
+    	var_dump($istdata);
+    }
+    
+    
+    /**
+     * 排列五
+     */
+    public function plw()
+    {
+    	$xml = $this->get_xml(self::PLW_OPEN_XML);
+    	if ( ! $xml )
+	    	return false;
+    	$data = json_decode(json_encode($xml), true);
+    	$istdata = array(
+    			'periodicalno' => $data['PeriodicalNO'],
+    			'result'       => $data['Result'],
+    			'resulttime'   => strtotime($data['ResultTime']),
+    			'encashtime'   => strtotime($data['EncashTime']),
+    			'money1'  	   => str_replace(',', '', $data['Money1']),
+    			'num1'         => str_replace(',', '', $data['Num1']),
+    			'totalmoney'   => str_replace(',', '', $data['TotalMoney']),
+    			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
+    			'isoutmoney'   => $data['IsOutMoney']
+    	);
+    	//$this->load->model('Expect_model');
+    	//$result = $this->Expect_model->replace_expect($plw_data, 'expect_plw');
+    	var_dump($istdata);
+    }
+    
+    
     
     /**
      * 大乐透
      */
     public function dlt()
     {
-    
     	$xml = $this->get_xml(self::DLT_OPEN_XML);
     	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
+	    	return false;
     
     	$data = json_decode(json_encode($xml), true);
     	$info = array(
@@ -167,7 +154,7 @@ class CrawlKaijiangController extends Controller
     			'backfx ' => $data['BackFX']['@attributes'],
     			'tidian' => $data['TiDian']['@attributes']
     	);
-    	$dlt_data = array(
+    	$istdata = array(
     			'periodicalno' =>$data['PeriodicalNO'],
     			'foreresult' 	=>$data['ForeResult'],
     			'outball'		=>$data['OutBall'],
@@ -227,9 +214,9 @@ class CrawlKaijiangController extends Controller
     			'isoutmoney'	=>$data['IsOutMoney'],
     			'info'		 	=> json_encode($info)
     	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($dlt_data, 'expect_dlt');
-    	var_dump($result);
+    	//$this->load->model('Expect_model');
+    	//$result = $this->Expect_model->replace_expect($dlt_data, 'expect_dlt');
+    	var_dump($istdata);
     }
     
     /**
@@ -239,14 +226,12 @@ class CrawlKaijiangController extends Controller
     {
     	$xml = $this->get_xml(self::SD_OPEN_XML);
     	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
+	    	return false;
     	$data = json_decode(json_encode($xml), true);
     	$info = array(
     			'fenxi'  => $data['FenXi']['@attributes'],
     	);
-    	$sd_data = array(
+    	$istdata = array(
     			'periodicalno' => $data['PeriodicalNO'],
     			'result'       => $data['Result'],
     			'resulttime'   => strtotime($data['ResultTime']),
@@ -263,9 +248,9 @@ class CrawlKaijiangController extends Controller
     			'isoutmoney'   => $data['IsOutMoney'],
     			'info'		   => json_encode($info)
     	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($sd_data, 'expect_sd');
-    	var_dump($result);
+    	//$this->load->model('Expect_model');
+    	//$result = $this->Expect_model->replace_expect($sd_data, 'expect_sd');
+    	var_dump($istdata);
     }
     
     /**
@@ -275,12 +260,10 @@ class CrawlKaijiangController extends Controller
     {
     	$xml = $this->get_xml(self::QXC_OPEN_XML);
     	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
+	    	return false;
     	$data = json_decode(json_encode($xml), true);
     
-    	$qxc_data = array(
+    	$istdata = array(
     			'periodicalno' => $data['PeriodicalNO'],
     			'result'    => $data['Result'],
     			'resulttime'   => strtotime($data['ResultTime']),
@@ -301,9 +284,9 @@ class CrawlKaijiangController extends Controller
     			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
     			'isoutmoney'   => $data['IsOutMoney']
     	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($qxc_data,'expect_qxc');
-    	var_dump($result);
+    	//$this->load->model('Expect_model');
+    	//$result = $this->Expect_model->replace_expect($qxc_data,'expect_qxc');
+    	var_dump($istdata);
     }
     
     /**
@@ -313,12 +296,10 @@ class CrawlKaijiangController extends Controller
     {
     	$xml = $this->get_xml(self::EEXW_OPEN_XML);
     	if ( ! $xml )
-    	{
-    		exit('get xml false!');
-    	}
+	    	return false;
     	$data = json_decode(json_encode($xml), true);
     
-    	$eexw_data = array(
+    	$istdata = array(
     			'periodicalno' => $data['PeriodicalNO'],
     			'result'       => $data['Result'],
     			'outball'      => $data['OutBall'],
@@ -334,20 +315,19 @@ class CrawlKaijiangController extends Controller
     			'ccmoney'      => str_replace(',', '', $data['CCMoney']),
     			'isoutmoney'   => $data['IsOutMoney']
     	);
-    	$this->load->model('Expect_model');
-    	$result = $this->Expect_model->replace_expect($eexw_data,'expect_eexw');
-    	var_dump($result);
+    	//$this->load->model('Expect_model');
+    	//$result = $this->Expect_model->replace_expect($eexw_data,'expect_eexw');
+    	var_dump($istdata);
     }
     
-    /**
-     *
-     * @param string $xml_url
-     */
+    //get remote xml content
     private function get_xml($xml_url)
     {
-    	$this->load->helper('tool');
-    	$xml_string = super_curl($xml_url);
-    	$xml = simplexml_load_string($xml_string);
+    	$ch = new CurlTool($xml_url);
+    	$xml_string = $ch->getResult();
+    	$xml = @simplexml_load_string($xml_string);
+    	if (!$xml)
+    		Yii::info("getXml fail, url ".$xml_url);
     	return $xml;
     }
 }
