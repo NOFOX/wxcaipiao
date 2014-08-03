@@ -139,7 +139,7 @@ class Kaijiang extends \yii\base\Object
 	
 	
 	//qxc
-	public static function fetchDataQxc()
+	public static function fetchDataQxc($periodicalno)
 	{
 		$row = self::fetchDetail('qxc',$periodicalno);
 		$data =
@@ -155,7 +155,7 @@ class Kaijiang extends \yii\base\Object
 	}
 
 	//eexw
-	public static function fetchDataEexw()
+	public static function fetchDataEexw($periodicalno)
 	{
 		$row = self::fetchDetail('eexw',$periodicalno);
 		$data =
