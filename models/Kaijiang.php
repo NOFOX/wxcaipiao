@@ -22,8 +22,8 @@ class Kaijiang extends \yii\base\Object
 	{
 		return [
 			[
-				'title' 	  =>	'操作指示',
-				'description' => 	'输入双色球、大乐透、双色球14087试试',
+				'title' 	  =>	'操作提示',
+				'description' => 	'输入双色球、大乐透、双色球14087、3d、七星彩、排列3试试',
 				'picurl'	  => 	self::$site_url."/img/logo.jpg",
 				'url'		  =>	self::$site_url.'/?r=wechat/help'
 			]
@@ -35,32 +35,28 @@ class Kaijiang extends \yii\base\Object
 	{
 		$method  = 'fetchData'.ucfirst($caizhong);
 		$data    =  self::$method($periodicalno);
-		//@todo cache result
 		return  $data;
 	}
 	
 	public static function fetchDetail($caizhong, $periodicalno)
 	{
-		$method  = 'fetchData'.ucfirst($caizhong);
-		self::$method($periodicalno, $detailRow);
+		if ($periodicalno)
+		{
+			$sql = "select * from expect_{$caizhong} where periodicalno = {$periodicalno}";
+		}
+		else
+		{
+			$sql = "select * from expect_{$caizhong} order by periodicalno desc limit 1";
+		}
+		$row = Yii::$app->db->createCommand($sql)->queryOne();
 		//@todo cache result
-		return  $detailRow;
+		return  $row;
 	}
 	
 	//ssq
-	public static function fetchDataSsq($periodicalno, &$detailRow = array())
+	public static function fetchDataSsq($periodicalno)
 	{
-		
-		if ($periodicalno)
-		{
-			$sql = "select * from expect_ssq where periodicalno = {$periodicalno}";
-		}
-		else 
-		{
-			$sql = "select * from expect_ssq order by periodicalno desc limit 1";
-		}
-		$row = Yii::$app->db->createCommand($sql)->queryOne();
-		
+		$row = self::fetchDetail('ssq',$periodicalno);
 		//@todo 使用消息模板
 		$data = 
 		[
@@ -71,187 +67,107 @@ class Kaijiang extends \yii\base\Object
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=ssq&periodicalno={$row['periodicalno']}"
 			]
 		];
-		$detailRow = $row;
 		return $data;
 	}
 	
 	
 	//dlt
-	public static function fetchDataDlt()
+	public static function fetchDataDlt($periodicalno)
 	{
-		
-		$data = [
+		$row = self::fetchDetail('dlt',$periodicalno);
+		$data =
+		[
 			[
-				'title' 	  =>	'大乐透第14088期开奖号码：07,13,20,25,26|08,11',
-				'description' => 	'一等奖（基本）：3注，每注10,000,000元；一等奖（追加）：1注，每注6,000,000元；二等奖（基本）：108注，每注80,866元；二等奖（追加）：13注，每注48,519元',
-				'picurl'	  => 	self::$site_url."/img/lot_dlt.jpg",	//url暂时写死
-				'url'		  =>	self::$site_url.'/?r=wechat/detail'
+			'title' 	  => "大乐透第{$row['periodicalno']}期开奖号码：{$row['foreresult']}|{$row['backresult']}",
+			'description' => "一等奖（基本）：{$row['basenum1']}注，每注{$row['basemoney1']}元；一等奖（追加）：{$row['additionnum1']}注，每注{$row['additionmoney1']}元；二等奖（基本）：{$row['basenum2']}注，每注{$row['basemoney2']}元；二等奖（追加）：{$row['additionnum2']}注，每注{$row['additionmoney2']}元",
+			'picurl'	  => self::$site_url."/img/lot_dlt.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=dlt&periodicalno={$row['periodicalno']}"
 			]
 		];
-		
-		
 		return $data;
-		
-		/*
-		$result = $this->db
-		->select()
-		->from('expect_dlt')
-		->order_by('periodicalno','DESC')
-		->limit(1)
-		->get()
-		->first_row();
-		$result = (array) $result;
-	
-		$text  = "大乐透第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-		$text .= "前区：{$result['foreresult']}".PHP_EOL;
-		$text .= "后区：{$result['backresult']}".PHP_EOL;
-		$text .= "出球顺序：{$result['outball']}".PHP_EOL;
-		$text .= "一等基本每注：".number_format($result['basemoney1'])."元".PHP_EOL;
-		$text .= "一等基本注数：{$result['basenum1']}注".PHP_EOL;
-		$text .= "一等追加每注：".number_format($result['additionmoney1'])."元".PHP_EOL;
-		$text .= "一等追加注数：{$result['additionnum1']}注".PHP_EOL;
-		$text .= "二等基本每注：".number_format($result['basemoney2'])."元".PHP_EOL;
-		$text .= "二等基本注数：{$result['basenum2']}注".PHP_EOL;
-		$text .= "二等追加每注：".number_format($result['additionmoney2'])."元".PHP_EOL;
-		$text .= "二等追加注数：{$result['additionnum2']}注".PHP_EOL;
-		$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';
-		$text .= PHP_EOL;
-		$info   = json_decode($result['info'],true);
-		$tidian = $info['tidian'];
-		$tidian_text = "小帮提点：".PHP_EOL;
-		foreach ($tidian as $t) {
-			$tidian_text .= $t.PHP_EOL;
-		}
-		return $text.PHP_EOL.$tidian_text;
-		*/
-		
 	}
 	
 	
-	/**
-	 * 获取排列三开奖信息
-	 */
+	//pls
 	public static function fetchDataPls($periodicalno)
 	{
-		$result = $this->db
-					->select()
-					->from('expect_pls')
-					->order_by('periodicalno','DESC')
-					->limit(1)
-					->get()
-					->first_row();
-		$result = (array) $result;		
-		$zxtype = $result['zuxuantype'] == 'z3' ? '三' : '六';
-		$zxnum  = $result['zuxuantype'] == 'z3' ? '2' : '3';		
-		$text  = "排列三第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-    	$text .= "开奖号码：{$result['result']}".PHP_EOL;
-    	$text .= "直选每注：".number_format($result['money1'])."元".PHP_EOL;
-    	$text .= "直选注数：{$result['num1']}注".PHP_EOL;
-    	$text .= "组{$zxtype}每注：".number_format($result['money'.$zxnum])."元".PHP_EOL;
-    	$text .= "组{$zxtype}注数：{$result['num'.$zxnum]}注".PHP_EOL;
-    	$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';
-    	return $text;
+		$row = self::fetchDetail('pls',$periodicalno);
+		$data =
+		[
+			[
+			'title' 	  => "排列3第{$row['periodicalno']}期开奖号码：{$row['result']}",
+			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'picurl'	  => self::$site_url."/img/lot_pls.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=pls&periodicalno={$row['periodicalno']}"
+			]
+		];
+		return $data;
 	}
 	
-	/**
-	 * 获取排列五开奖信息
-	 */
-	public static function get_plw_latest_kj()
+	//plw
+	public static function fetchDataPlw($periodicalno)
 	{
-		$result = $this->db
-					->select()
-					->from('expect_plw')
-					->order_by('periodicalno','DESC')
-					->limit(1)
-					->get()
-					->first_row();
-		$result = (array) $result;		
-		$text  = "排列五第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-    	$text .= "开奖号码：{$result['result']}".PHP_EOL;
-    	$text .= "一等每注：".number_format($result['money1'])."元".PHP_EOL;
-    	$text .= "一等注数：{$result['num1']}注".PHP_EOL;
-    	$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';    	
-    	return $text;	
+		$row = self::fetchDetail('plw',$periodicalno);
+		$data =
+		[
+			[
+			'title' 	  => "排列5第{$row['periodicalno']}期开奖号码：{$row['result']}",
+			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元",
+			'picurl'	  => self::$site_url."/img/lot_plw.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=plw&periodicalno={$row['periodicalno']}"
+			]
+		];
+		return $data;
 	}
 	
 
-	/**
-	 * 获取福彩3D开奖信息
-	 */
-	public static function get_sd_latest_kj()
+	//sd
+	public static function fetchDataSd($periodicalno)
 	{
-		$result = $this->db
-					->select()
-					->from('expect_sd')
-					->order_by('periodicalno','DESC')
-					->limit(1)
-					->get()
-					->first_row();
-		$result = (array) $result;		
-		$zxword = $result['zuxuantype'] == 'z3' ? '三' : '六';
-		$zxnum  = $result['zuxuantype'] == 'z3' ? '2' : '3';		
-		$text  = "福彩3D第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-    	$text .= "开奖号码：{$result['result']}".PHP_EOL;
-    	$text .= "直选每注：".number_format($result['money1'])."元".PHP_EOL;
-    	$text .= "直选注数：{$result['num1']}注".PHP_EOL;
-    	$text .= "组选{$zxword}每注：".number_format($result['money'.$zxnum])."元".PHP_EOL;
-    	$text .= "组选{$zxword}注数：{$result['num'.$zxnum]}注".PHP_EOL;
-    	$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';
-    	$text .= PHP_EOL;   	
-    	return $text;
+		$row = self::fetchDetail('sd',$periodicalno);
+		$data =
+		[
+			[
+			'title' 	  => "3D第{$row['periodicalno']}期开奖号码：{$row['result']}",
+			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'picurl'	  => self::$site_url."/img/lot_sd.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=sd&periodicalno={$row['periodicalno']}"
+			]
+		];
+		return $data;
 	}
 	
 	
-	/**
-	 * 获取七星彩开奖信息
-	 */
-	public static function get_qxc_latest_kj()
+	//qxc
+	public static function fetchDataQxc()
 	{
-		$result = $this->db
-					->select()
-					->from('expect_qxc')
-					->order_by('periodicalno','DESC')
-					->limit(1)
-					->get()
-					->first_row();
-		$result = (array) $result;	
-		$text  = "七星彩第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-    	$text .= "开奖号码：{$result['result']}".PHP_EOL;
-    	$text .= "一等每注：".number_format($result['money1'])."元".PHP_EOL;
-    	$text .= "一等注数：{$result['num1']}注".PHP_EOL;
-    	$text .= "二等每注：".number_format($result['money2'])."元".PHP_EOL;
-    	$text .= "二等注数：{$result['num2']}注".PHP_EOL;
-    	$text .= "三等每注：".number_format($result['money3'])."元".PHP_EOL;
-    	$text .= "三等注数：{$result['num3']}注".PHP_EOL;
-    	$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';
-    	$text .= PHP_EOL; 	
-    	return $text.PHP_EOL;	
+		$row = self::fetchDetail('qxc',$periodicalno);
+		$data =
+		[
+			[
+			'title' 	  => "七星彩第{$row['periodicalno']}期开奖号码：{$row['result']}",
+			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'picurl'	  => self::$site_url."/img/lot_qxc.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=qxc&periodicalno={$row['periodicalno']}"
+			]
+		];
+		return $data;
 	}
 
-	/**
-	 * 获取22选5开奖信息
-	 */
-	public static function get_eexw_latest_kj()
+	//eexw
+	public static function fetchDataEexw()
 	{
-		$result = $this->db
-					->select()
-					->from('expect_eexw')
-					->order_by('periodicalno','DESC')
-					->limit(1)
-					->get()
-					->first_row();
-		$result = (array) $result;		
-		$text  = "22选5第{$result['periodicalno']}期开奖结果：".PHP_EOL;
-    	$text .= "开奖号码：{$result['result']}".PHP_EOL;
-    	$text .= "一等每注：".number_format($result['money1'])."元".PHP_EOL;
-    	$text .= "一等注数：{$result['num1']}注".PHP_EOL;
-    	$text .= "二等每注：".number_format($result['money2'])."元".PHP_EOL;
-    	$text .= "二等注数：{$result['num2']}注".PHP_EOL;
-    	$text .= "三等每注：".number_format($result['money3'])."元".PHP_EOL;
-    	$text .= "三等注数：{$result['num3']}注".PHP_EOL;
-    	$text .= $result['isoutmoney'] == 1 ? '已算奖' : '暂未算奖';
-    	$text .= PHP_EOL;
-    	return $text.PHP_EOL;	
+		$row = self::fetchDetail('eexw',$periodicalno);
+		$data =
+		[
+			[
+			'title' 	  => "22选5第{$row['periodicalno']}期开奖号码：{$row['result']}",
+			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'picurl'	  => self::$site_url."/img/lot_eexw.jpg",
+			'url'		  => self::$site_url."/?r=wechat/detail&cz=eexw&periodicalno={$row['periodicalno']}"
+			]
+		];
+		return $data;	
 	}
 
 
@@ -264,6 +180,7 @@ class Kaijiang extends \yii\base\Object
 	{
 		try
 		{
+			//@todo 事务回滚
 			Yii::$app->db->createCommand()->delete($table, 'periodicalno = '.$data['periodicalno'])->execute();
 			Yii::$app->db->createCommand()->insert($table, $data)->execute();
 		}
