@@ -16,22 +16,46 @@
 	        </thead>
 	        <tbody>
 	        	<tr>
-	        		<td>一等奖</td><td><?php echo $detail['num1']?></td><td><?php echo $detail['money1'] ?></td>
+	        		<td>一等奖（基本）</td><td><?php echo number_format($detail['basenum1'])?></td><td><?php echo number_format($detail['basemoney1']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>二等奖</td><td><?php echo $detail['num2']?></td><td><?php echo $detail['money2'] ?></td>
+	        		<td>一等奖（追加）</td><td><?php echo number_format($detail['additionnum1'])?></td><td><?php echo number_format($detail['additionmoney1']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>三等奖</td><td><?php echo $detail['num3']?></td><td><?php echo $detail['money3'] ?></td>
+	        		<td>二等奖（基本）</td><td><?php echo number_format($detail['basenum2'])?></td><td><?php echo number_format($detail['basemoney2']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>四等奖</td><td><?php echo $detail['num4']?></td><td><?php echo $detail['money4'] ?></td>
+	        		<td>二等奖（追加）</td><td><?php echo number_format($detail['additionnum2'])?></td><td><?php echo number_format($detail['additionmoney2']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>五等奖</td><td><?php echo $detail['num5']?></td><td><?php echo $detail['money5'] ?></td>
+	        		<td>三等奖（基本）</td><td><?php echo number_format($detail['basenum3'])?></td><td><?php echo number_format($detail['basemoney3']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>六等奖</td><td><?php echo $detail['num6']?></td><td><?php echo $detail['money6'] ?></td>
+	        		<td>三等奖（追加）</td><td><?php echo number_format($detail['additionnum3'])?></td><td><?php echo number_format($detail['additionmoney3']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>四等奖（基本）</td><td><?php echo number_format($detail['basenum4'])?></td><td><?php echo number_format($detail['basemoney4']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>四等奖（追加）</td><td><?php echo number_format($detail['additionnum4'])?></td><td><?php echo number_format($detail['additionmoney4']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>五等奖（基本）</td><td><?php echo number_format($detail['basenum5'])?></td><td><?php echo number_format($detail['basemoney5']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>五等奖（追加）</td><td><?php echo number_format($detail['additionnum5'])?></td><td><?php echo number_format($detail['additionmoney5']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>六等奖（基本）</td><td><?php echo number_format($detail['basenum6'])?></td><td><?php echo number_format($detail['basemoney6']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>六等奖（追加）</td><td><?php echo number_format($detail['additionnum6'])?></td><td><?php echo number_format($detail['additionmoney6']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>七等奖（基本）</td><td><?php echo number_format($detail['basenum7'])?></td><td><?php echo number_format($detail['basemoney7']) ?></td>
+	        	</tr>
+	        	<tr>
+	        		<td>七等奖（追加）</td><td><?php echo number_format($detail['additionnum7'])?></td><td><?php echo number_format($detail['additionmoney7']) ?></td>
 	        	</tr>
 	        </tbody>
 	    </table>

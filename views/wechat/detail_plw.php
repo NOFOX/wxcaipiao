@@ -15,7 +15,7 @@
 	        </thead>
 	        <tbody>
 	        	<tr>
-	        		<td>一等奖</td><td><?php echo $detail['num1']?></td><td><?php echo $detail['money1'] ?></td>
+	        		<td>一等奖</td><td><?php echo number_format($detail['num1'])?></td><td><?php echo number_format($detail['money1']) ?></td>
 	        	</tr>
 	        </tbody>
 	    </table>

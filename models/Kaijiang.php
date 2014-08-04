@@ -62,7 +62,7 @@ class Kaijiang extends \yii\base\Object
 		[
 			[
 			'title' 	  => "双色球第{$row['periodicalno']}期开奖号码：{$row['redresult']}|{$row['blueresult']}",
-			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'description' => "一等奖：".number_format($row['num1'])."注，每注".number_format($row['money1'])."元；二等奖".number_format($row['num2'])."注，每注".number_format($row['money2'])."元；三等奖".number_format($row['num3'])."注，每注".number_format($row['money3'])."元",
 			'picurl'	  => self::$site_url."/img/lot_ssq.jpg",
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=ssq&periodicalno={$row['periodicalno']}"
 			]
@@ -79,7 +79,10 @@ class Kaijiang extends \yii\base\Object
 		[
 			[
 			'title' 	  => "大乐透第{$row['periodicalno']}期开奖号码：{$row['foreresult']}|{$row['backresult']}",
-			'description' => "一等奖（基本）：{$row['basenum1']}注，每注{$row['basemoney1']}元；一等奖（追加）：{$row['additionnum1']}注，每注{$row['additionmoney1']}元；二等奖（基本）：{$row['basenum2']}注，每注{$row['basemoney2']}元；二等奖（追加）：{$row['additionnum2']}注，每注{$row['additionmoney2']}元",
+			'description' => "一等（基本）：".number_format($row['basenum1'])."注，每注".number_format($row['basemoney1'])."元；".
+					"一等（追加）：".number_format($row['additionnum1'])."注，每注".number_format($row['additionmoney1'])."元；".
+					"二等（基本）：".number_format($row['basenum2'])."注，每注".number_format($row['basemoney2'])."元；".
+					"二等（追加）：".number_format($row['additionnum2'])."注，每注".number_format($row['additionmoney2'])."元",
 			'picurl'	  => self::$site_url."/img/lot_dlt.jpg",
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=dlt&periodicalno={$row['periodicalno']}"
 			]
@@ -96,7 +99,9 @@ class Kaijiang extends \yii\base\Object
 		[
 			[
 			'title' 	  => "排列3第{$row['periodicalno']}期开奖号码：{$row['result']}",
-			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'description' => "一等奖：".number_format($row['num1'])."注，每注".number_format($row['money1'])."元；".
+				"二等奖".number_format($row['num2'])."注，每注".number_format($row['money2'])."元；".
+				"三等奖".number_format($row['num3'])."注，每注".number_format($row['money3'])."元",
 			'picurl'	  => self::$site_url."/img/lot_pls.jpg",
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=pls&periodicalno={$row['periodicalno']}"
 			]
@@ -112,7 +117,7 @@ class Kaijiang extends \yii\base\Object
 		[
 			[
 			'title' 	  => "排列5第{$row['periodicalno']}期开奖号码：{$row['result']}",
-			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元",
+			'description' => "一等奖：".number_format($row['num1'])."注，每注".number_format($row['money1'])."元",
 			'picurl'	  => self::$site_url."/img/lot_plw.jpg",
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=plw&periodicalno={$row['periodicalno']}"
 			]
@@ -129,7 +134,9 @@ class Kaijiang extends \yii\base\Object
 		[
 			[
 			'title' 	  => "3D第{$row['periodicalno']}期开奖号码：{$row['result']}",
-			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'description' => "一等奖：".number_format($row['num1'])."注，每注".number_format($row['money1'])."元；".
+			"二等奖".number_format($row['num2'])."注，每注".number_format($row['money2'])."元；".
+			"三等奖".number_format($row['num3'])."注，每注".number_format($row['money3'])."元",
 			'picurl'	  => self::$site_url."/img/lot_sd.jpg",
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=sd&periodicalno={$row['periodicalno']}"
 			]
@@ -146,7 +153,9 @@ class Kaijiang extends \yii\base\Object
 		[
 			[
 			'title' 	  => "七星彩第{$row['periodicalno']}期开奖号码：{$row['result']}",
-			'description' => "一等奖：{$row['num1']}注，每注{$row['money1']}元；二等奖{$row['num2']}注，每注{$row['money2']}元；三等奖{$row['num3']}注，每注{$row['money3']}元",
+			'description' => "一等奖：".number_format($row['num1'])."注，每注".number_format($row['money1'])."元；".
+				"二等奖".number_format($row['num2'])."注，每注".number_format($row['money2'])."元；".
+				"三等奖".number_format($row['num3'])."注，每注".number_format($row['money3'])."元",
 			'picurl'	  => self::$site_url."/img/lot_qxc.jpg",
 			'url'		  => self::$site_url."/?r=wechat/detail&cz=qxc&periodicalno={$row['periodicalno']}"
 			]

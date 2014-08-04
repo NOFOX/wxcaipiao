@@ -15,13 +15,13 @@
 	        </thead>
 	        <tbody>
 	        	<tr>
-	        		<td>一等奖</td><td><?php echo $detail['num1']?></td><td><?php echo $detail['money1'] ?></td>
+	        		<td>一等奖</td><td><?php echo number_format($detail['num1'])?></td><td><?php echo number_format($detail['money1']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>二等奖</td><td><?php echo $detail['num2']?></td><td><?php echo $detail['money2'] ?></td>
+	        		<td>二等奖</td><td><?php echo number_format($detail['num2'])?></td><td><?php echo number_format($detail['money2']) ?></td>
 	        	</tr>
 	        	<tr>
-	        		<td>三等奖</td><td><?php echo $detail['num3']?></td><td><?php echo $detail['money3'] ?></td>
+	        		<td>三等奖</td><td><?php echo number_format($detail['num3'])?></td><td><?php echo number_format($detail['money3']) ?></td>
 	        	</tr>
 	        </tbody>
 	    </table>
